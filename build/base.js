@@ -6,7 +6,9 @@ gulp.task('set-serve-node-env', function () {
     return process.env.NODE_ENV = 'development';
 });
 gulp.task('set-prod-node-env', function () {
-    return process.env.NODE_ENV = 'production';
+     process.env.NODE_ENV = 'production';
+     console.log('process.env.NODE_ENV=> ' + process.env.NODE_ENV)
+     return;
 });
 
 gulp.task('set-test-node-env', function () {
@@ -21,11 +23,13 @@ gulp.task('set-serve-node-env', function () {
  * 清除dist目录文件
  */
 gulp.task('clean', function () {
-    del.sync([config.dist]);
+    del(['./dist/*']).then((res)=>{
+        console.log(JSON.stringify(res));
+    });
 });
 
 
 gulp.task('copyhtml', function () {
-     gulp.src('./src/index.html')
+    gulp.src('./src/index.html')
         .pipe(gulp.dest('dist/'));
 });

@@ -2,21 +2,32 @@ const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const IS_PROD = process.env.NODE_ENV == 'production';
 const config = require('./config');
 const apiJson = require('./assets/api.json');
-var TEST_ENV = process.env.TEST_ENV || 'serve';
 var plugins = [];
+var TEST_ENV = process.argv.slice(2) + '';
+TEST_ENV = TEST_ENV ? TEST_ENV : 'serve';
+var IS_PROD = TEST_ENV == 'prod' ? true : false;
+
 if (IS_PROD) {
+    console.log('======IS_PROD========' + IS_PROD)
+    process.env.NODE_ENV = true;
     plugins.push(new webpack.DefinePlugin({
-        'process.env': { //设置成生产环境
-            NODE_ENV: 'production'
-        }
+        // 'process.env': { //设置成生产环境
+        //     NODE_ENV: 'production'
+        // },
+        'process.env': 'production'
     }));
     plugins.push(new webpack.optimize.UglifyJsPlugin({ //压缩代码
         compress: {
             warnings: false
         }
+    }));
+} else {
+    const WebpackBrowserPlugin = require('webpack-browser-plugin');
+
+    plugins.push(new WebpackBrowserPlugin({
+        port: 3000
     }));
 }
 
@@ -28,11 +39,7 @@ if (IS_PROD) {
 //     })
 // );
 
-const WebpackBrowserPlugin = require('webpack-browser-plugin');
 
-plugins.push(new WebpackBrowserPlugin({
-    port: 3000
-}));
 
 var ReplaceBundleStringPlugin = require('replace-bundle-webpack-plugin');
 plugins.push(new ReplaceBundleStringPlugin([{
@@ -42,9 +49,10 @@ plugins.push(new ReplaceBundleStringPlugin([{
         return apiJson[apiName] && apiJson[apiName][TEST_ENV];
     }
 }]));
-
+console.log('output path=> ' + path.resolve(__dirname + '/dist/'));
 module.exports = {
-    entry: ['./src/main.js'], //编译入口文件
+    // entry: ['./src/main.js'], //编译入口文件
+    entry: [path.resolve(__dirname + '/src/main.js')],
     // output: {
     //     // publicPath: config.publicPath, //服务器的路径
     //     path: path.resolve(__dirname + config.publicPath), //编译到app目录
@@ -100,6 +108,7 @@ module.exports = {
     resolveLoader: {
         moduleExtensions: ['-loader']
     },
+    // devtool: false
     // plugins: [
     //     new ExtractTextPlugin('./style.css')
     // ],

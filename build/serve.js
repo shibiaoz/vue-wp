@@ -5,6 +5,8 @@ const path = require('path');
 const exec = require('child_process').exec;
 // var browserSync = require('browser-sync').create();
 var WebpackDevServer = require('webpack-dev-server');
+var gulpWebpack = require('gulp-webpack');
+var source = require('vinyl-source-stream');
 gulp.task('serve', ['copyhtml'], function () {
     console.log('serve...');
     // webpack(webpackConfig, function (err, state) {
@@ -16,7 +18,6 @@ gulp.task('serve', ['copyhtml'], function () {
         console.log('Exit code:', code);
     });
 
-    console.log(webpackConfig.output.path);
     new WebpackDevServer(webpack(webpackConfig), {
         // publicPath:  webpackConfig.output.path,
         publicPath: "/dist/",
@@ -62,4 +63,32 @@ function compileCallback(err) {
 }
 gulp.task('default', ['set-serve-node-env', 'clean', 'serve'], function () {
     console.log('default.....');
+});
+
+
+
+gulp.task('test', function () {
+
+});
+
+
+gulp.task('prod', ['clean', 'copyhtml'], function () {
+    console.log(JSON.stringify(webpackConfig) + '--' + './src/main.js');
+    // webpack(webpackConfig);
+
+    // gulp.src(path.resolve('./src/main.js'))
+    //         .pipe(gulpWebpack(webpackConfig))
+    //         .pipe(gulp.dest(path.resolve('./dist/')));
+
+    webpack(webpackConfig, function (err, stats) {
+        // spinner.stop()
+        if (err) throw err
+        process.stdout.write(stats.toString({
+            colors: true,
+            modules: false,
+            children: false,
+            chunks: false,
+            chunkModules: false
+        }) + '\n\n');
+    })
 });
