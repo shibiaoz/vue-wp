@@ -37,6 +37,7 @@
     "file-loader": "^0.10.0",
     "gulp": "^3.9.1",
     "html-webpack-plugin": "^2.28.0",
+    "replace-bundle-webpack-plugin": "^1.0.0",
     "require-dir": "^0.3.1",
     "style-loader": "^0.13.1",
     "url-loader": "^0.5.7",

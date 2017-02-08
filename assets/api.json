@@ -1,0 +1,9 @@
+{
+    "getTokenApi": {
+        "serve": "/data/getToken.json",
+        "dev": "http://xxxxxxx",
+        "test": "http://xxxxxxxxx",
+        "beta": "http://xxxxxxxxxxx",
+        "prod": "https://xxxxxxxxxxxx"
+    }
+}

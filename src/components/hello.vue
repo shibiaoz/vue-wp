@@ -29,7 +29,8 @@ export default  {
             .get('{{getTokenApi}}')
             .query({ action: 'edit', city: 'London' }) // query string
             .end(function(err, res){
-                 alert(JSON.stringify(res));
+                //  alert(JSON.stringify(res));
+                alert('end...');
             });
       }
   }
